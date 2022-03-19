@@ -1,49 +1,25 @@
 <?php
-
-function validaPrimerLineaEntrada($lineaUno){
-	$limiteInferiorM = 2;
-	$limiteSuperiorM = 50;
-	$limiteInferiorN = 3;
-	$limiteSuperiorN = 5000;
-	
-	$arrayElementosLineaUno = explode(" ", $lineaUno);
-	echo "Elementos en linea uno: " . count($arrayElementosLineaUno);
-	if(count($arrayElementosLineaUno)!=3){
-		throw new Exception('Elementos de linea uno no coinciden con especificación');
-	}
-	$m1 = $arrayElementosLineaUno[0];
-	$m2 = $arrayElementosLineaUno[1];
-	$n = $arrayElementosLineaUno[2];
-	
-	if($n<$limiteInferiorN || $n>$limiteSuperiorN){
-		throw new Exception('El elemento n no está dentro de los límites');
-	}
-	
-	if($m1<$limiteInferiorM || $m1>$limiteSuperiorM){
-		throw new Exception('El elemento m1 no está dentro de los límites de la aplicación');
-	}
-	if($m2<$limiteInferiorM || $m2>$limiteSuperiorM){
-		throw new Exception('El elemento m2 no está dentro de los límites de la aplicación');
-	}
-	
-	return true;
-}
-function validaLineas($arrayLineas){
-	if(validaPrimerLineaEntrada($arrayLineas[0])){
-		echo "<br>todo bien con la línea uno";
-	}
-}
-
-
-function leeArchivo($nombreArchivo){
-	$arrayLineas = file($nombreArchivo);
-	if(validaLineas($arrayLineas)){
-		return $arrayLineas;
-	}
-}
+require_once __DIR__ . '/archivoEntradaCtrl.php';
+require_once __DIR__ . '/procesaDatosBeanCtrl.php';
+require_once __DIR__ . '/challenge1Bean.php';
 
 function procesaArchivo($nombreArchivo){
-	leeArchivo($nombreArchivo);
+    $ctrlEntrada = new archivoEntradaCtrl();
+	$beanChallenge1 = $ctrlEntrada->leeArchivo($nombreArchivo);
+    //echo "<br>Resultado del analisis: " ;
+    //var_dump($beanChallenge1);
+
+    $beanChallenge1->mensaje = procesaDatosBeanCtrl::eliminaCaracteresRepetidosEnMensaje($beanChallenge1->mensaje);
+
+    //echo "<br>Mensaje sin repeticiones: ".$beanChallenge1->mensaje;
+
+    $myfile = fopen(__DIR__ . "/salida.txt", "w") or die("No se puede abrir el archivo!");
+
+    $instruccion1EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->primeraInstruccion,$beanChallenge1->mensaje);
+    fwrite($myfile, $instruccion1EnMensaje."\n");
+    $instruccion2EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->segundaInstruccion,$beanChallenge1->mensaje);
+    fwrite($myfile, $instruccion2EnMensaje);
+    fclose($myfile);
 }
 
 procesaArchivo("./entrada.txt");
