@@ -1,5 +1,10 @@
 <?php
 class procesaDatosBeanCtrl{
+    /**
+     * Limpia la cadena con el mensaje de los caracteres repetidos
+     * @param String $mensaje El mensaje obtenido del archivo de entrada
+     * @return string La cadena del mensaje sin caracteres repetidos
+     */
     public static function eliminaCaracteresRepetidosEnMensaje($mensaje){
         $cadenaSinRepeticiones = ''; 
         $caracterActual = ''; 
@@ -7,34 +12,30 @@ class procesaDatosBeanCtrl{
         $unSoloCaracter = 1;
         $tamanioCadenaMensaje = strlen($mensaje);
 
-        //echo "Tamaño de la cadena del mensaje: " .$tamanioCadenaMensaje;
-
         for($i = 0;$i<$tamanioCadenaMensaje;$i++){
             $caracterActual = substr($mensaje, $i, $unSoloCaracter);
-            //echo '<br>' . $caracterActual . '-' . $caracterSinRepetir;
+
             if($caracterActual != $caracterSinRepetir){
                 $cadenaSinRepeticiones = $cadenaSinRepeticiones . $caracterSinRepetir;
                 $caracterSinRepetir = $caracterActual;
-                //echo '<br>Sin Repetir '.$caracterSinRepetir;
             }
-            //
 
-            //echo "<br>Caracter actual de la cadena ". $caracterActual;
         }
         if($caracterActual != $caracterSinRepetir){
             $cadenaSinRepeticiones = $cadenaSinRepeticiones . $caracterSinRepetir;
             $caracterSinRepetir = $caracterActual;
-            //echo '<br>Sin Repetir '.$caracterSinRepetir;
         }
-        //echo 'Cadena al final: '.$cadenaSinRepeticiones;
         return $cadenaSinRepeticiones;
     }
+    
+    /**
+     * Busca la instrucción en el mensaje
+     * @param string $instruccion la instrucción a buscar en el mensaje
+     * @param string $mensaje El mensaje donde se buscará la instrucción
+     * @return string SI se se encontró la instrucción en el mensaje o NO si lo contrario 
+     */
     public static function seEncuentraLaInstruccionEnElMensaje($instruccion, $mensaje){
         $pos = strpos($mensaje, $instruccion);
-        if ($pos === false) {
-            return 'NO';
-        }else{
-            return 'SI';
-        }
+        return ($pos === false)?'NO':'SI';
     }
 }

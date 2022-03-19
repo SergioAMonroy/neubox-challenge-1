@@ -1,19 +1,20 @@
 <?php
-require_once __DIR__ . '/archivoEntradaCtrl.php';
-require_once __DIR__ . '/procesaDatosBeanCtrl.php';
-require_once __DIR__ . '/challenge1Bean.php';
+require_once __DIR__ . '/ctrl/archivoEntradaCtrl.php';
+require_once __DIR__ . '/ctrl/procesaDatosBeanCtrl.php';
+require_once __DIR__ . '/bean/challenge1Bean.php';
 
-function procesaArchivo($nombreArchivo){
+/**
+ * Realiza la rutina de validar las entradas, limpiar lo puesto en el archivo y crear el archivo
+ * @param String $nombreArchivoEntrada La ubicación donde se encuentra el archivo de entrada, así como el nombre del archivo.
+ * @param String $archivoDeSalida La ruta donde se almacenará el archivo de salida.
+ */
+function procesaArchivo($nombreArchivoEntrada, $archivoDeSalida){
     $ctrlEntrada = new archivoEntradaCtrl();
-	$beanChallenge1 = $ctrlEntrada->leeArchivo($nombreArchivo);
-    //echo "<br>Resultado del analisis: " ;
-    //var_dump($beanChallenge1);
+	$beanChallenge1 = $ctrlEntrada->leeArchivo($nombreArchivoEntrada);
 
     $beanChallenge1->mensaje = procesaDatosBeanCtrl::eliminaCaracteresRepetidosEnMensaje($beanChallenge1->mensaje);
 
-    //echo "<br>Mensaje sin repeticiones: ".$beanChallenge1->mensaje;
-
-    $myfile = fopen(__DIR__ . "/salida.txt", "w") or die("No se puede abrir el archivo!");
+    $myfile = fopen($archivoDeSalida, "w") or die("No se puede abrir el archivo!");
 
     $instruccion1EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->primeraInstruccion,$beanChallenge1->mensaje);
     fwrite($myfile, $instruccion1EnMensaje."\n");
@@ -22,4 +23,4 @@ function procesaArchivo($nombreArchivo){
     fclose($myfile);
 }
 
-procesaArchivo("./entrada.txt");
+procesaArchivo(__DIR__ ."/entrada.txt", __DIR__ . "/salida.txt");
