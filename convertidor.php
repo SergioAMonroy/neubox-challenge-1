@@ -17,7 +17,9 @@ function procesaArchivo($nombreArchivoEntrada, $archivoDeSalida) {
 
         throw $e;
     }
-    $beanChallenge1->mensaje = procesaDatosBeanCtrl::eliminaCaracteresRepetidosEnMensaje($beanChallenge1->mensaje);
+    $beanChallenge1->primeraInstruccion = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->primeraInstruccion);
+    $beanChallenge1->segundaInstruccion = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->segundaInstruccion);
+    $beanChallenge1->mensaje = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->mensaje);
 
     $myfile = fopen($archivoDeSalida, "w") or die("No se puede abrir el archivo!");
 
@@ -30,17 +32,7 @@ function procesaArchivo($nombreArchivoEntrada, $archivoDeSalida) {
     //return "{'mensaje':'Exito'}";
 }
 
-//var_dump($_FILES);
-/*
-  $uploaddir = __DIR__ . '/subidas/';
-  $uploadfile = $uploaddir . 'entrada.txt';
- * 
- */
-
-$uploaddir = __DIR__ . '/subidas/';
-$uploadfile = $uploaddir . basename($_FILES['archivo']['name']);
-
-//echo "Subiendo el archivo " . $uploadfile;
+$uploadfile = __DIR__ . '/subidas/entrada.txt';
 
 if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $uploadfile)) {
     http_response_code(404);
@@ -48,6 +40,7 @@ if (!move_uploaded_file($_FILES['archivo']['tmp_name'], $uploadfile)) {
 }
 
 try {
+    
     echo procesaArchivo(__DIR__ . "/subidas/entrada.txt", __DIR__ . "/subidas/salida.txt");
     
 } catch (Exception $e) {

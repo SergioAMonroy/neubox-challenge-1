@@ -21,7 +21,6 @@ class archivoEntradaCtrl {
         $arrayLineas = file($nombreArchivo);
         try {
             if ($this->validaLineas($arrayLineas)) {
-                //echo "<br>Validado correcto";
                 $bean = new challenge1Bean();
                 $bean->primeraInstruccion = $this->primeraInstruccion;
                 $bean->segundaInstruccion = $this->segundaInstruccion;
@@ -41,8 +40,11 @@ class archivoEntradaCtrl {
     private function validaLineas($arrayLineas) {
         $numeroDeLineasEnElArchivo = 4;
         try {
-            $validadasLineas = count($arrayLineas) == $numeroDeLineasEnElArchivo;
-            $validadasLineas = $validadasLineas && $this->validaPrimerLineaEntrada(trim($arrayLineas[0]));
+            
+            if(count($arrayLineas) <> $numeroDeLineasEnElArchivo){
+                throw new Exception('El archivo no cuenta con las líneas requeridas, deben de ser 4 y hay ' . count($arrayLineas));
+            }
+            $validadasLineas = $this->validaPrimerLineaEntrada(trim($arrayLineas[0]));
             $validadasLineas = $validadasLineas && $this->validaSegundaLineaEntrada(trim($arrayLineas[1]));
             $validadasLineas = $validadasLineas && $this->validaTerceraLineaEntrada(trim($arrayLineas[2]));
             $validadasLineas = $validadasLineas && $this->validaCuartaLineaEntrada(trim($arrayLineas[3]));
@@ -67,8 +69,8 @@ class archivoEntradaCtrl {
 
         $arrayElementosLineaUno = explode(" ", $lineaUno);
 
-        if (count($arrayElementosLineaUno) != $numeroElementosEnLinea) {
-            throw new Exception('Elementos de linea uno no coinciden con especificación');
+        if (count($arrayElementosLineaUno) <> $numeroElementosEnLinea) {
+            throw new Exception('Elementos de linea uno no coinciden con especificación, deben ser tres y hay '.count($arrayElementosLineaUno));
         }
 
         if (preg_match('/[^0-9]/', $arrayElementosLineaUno[0])) {
@@ -101,6 +103,7 @@ class archivoEntradaCtrl {
         $this->m1 = $m1;
         $this->m2 = $m2;
         $this->n = $n;
+        
         return true;
     }
 
@@ -143,7 +146,7 @@ class archivoEntradaCtrl {
             throw new Exception('El tamaño de linea cuatro no coincide con el tamaño indicado en n');
         }
 
-        if (preg_match('/[a-zA-Z0-9]/', $arrayElementosLineaUno[2])) {
+        if (!preg_match("[^\w\*]", $lineaCuatro)) {
             throw new Exception('La cuarta línea no cumple con los requerimientos de caracteres');
         }
         $this->mensaje = $lineaCuatro;

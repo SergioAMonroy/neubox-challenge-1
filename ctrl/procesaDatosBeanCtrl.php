@@ -5,7 +5,7 @@ class procesaDatosBeanCtrl{
      * @param String $mensaje El mensaje obtenido del archivo de entrada
      * @return string La cadena del mensaje sin caracteres repetidos
      */
-    public static function eliminaCaracteresRepetidosEnMensaje($mensaje){
+    public static function eliminaCaracteresRepetido($mensaje){
         $cadenaSinRepeticiones = ''; 
         $caracterActual = ''; 
         $caracterSinRepetir = '';
