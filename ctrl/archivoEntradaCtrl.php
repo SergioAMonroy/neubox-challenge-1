@@ -4,7 +4,7 @@
  * Clase con el control de apertura y validación del archivo de entrada.
  */
 class archivoEntradaCtrl {
-    
+
     private $m1;
     private $m2;
     private $n;
@@ -19,13 +19,17 @@ class archivoEntradaCtrl {
      */
     public function leeArchivo($nombreArchivo) {
         $arrayLineas = file($nombreArchivo);
-        if ($this->validaLineas($arrayLineas)) {
-            //echo "<br>Validado correcto";
-            $bean = new challenge1Bean();
-            $bean->primeraInstruccion = $this->primeraInstruccion;
-            $bean->segundaInstruccion = $this->segundaInstruccion;
-            $bean->mensaje = $this->mensaje;
-            return $bean;
+        try {
+            if ($this->validaLineas($arrayLineas)) {
+                //echo "<br>Validado correcto";
+                $bean = new challenge1Bean();
+                $bean->primeraInstruccion = $this->primeraInstruccion;
+                $bean->segundaInstruccion = $this->segundaInstruccion;
+                $bean->mensaje = $this->mensaje;
+                return $bean;
+            }
+        } catch (MyException $e) {
+            throw $e;
         }
     }
 
@@ -36,13 +40,15 @@ class archivoEntradaCtrl {
      */
     private function validaLineas($arrayLineas) {
         $numeroDeLineasEnElArchivo = 4;
-        
-        $validadasLineas = count($arrayLineas) == $numeroDeLineasEnElArchivo;
-        $validadasLineas = $validadasLineas && $this->validaPrimerLineaEntrada(trim($arrayLineas[0]));
-        $validadasLineas = $validadasLineas && $this->validaSegundaLineaEntrada(trim($arrayLineas[1]));
-        $validadasLineas = $validadasLineas && $this->validaTerceraLineaEntrada(trim($arrayLineas[2]));
-        $validadasLineas = $validadasLineas && $this->validaCuartaLineaEntrada(trim($arrayLineas[3]));
-
+        try {
+            $validadasLineas = count($arrayLineas) == $numeroDeLineasEnElArchivo;
+            $validadasLineas = $validadasLineas && $this->validaPrimerLineaEntrada(trim($arrayLineas[0]));
+            $validadasLineas = $validadasLineas && $this->validaSegundaLineaEntrada(trim($arrayLineas[1]));
+            $validadasLineas = $validadasLineas && $this->validaTerceraLineaEntrada(trim($arrayLineas[2]));
+            $validadasLineas = $validadasLineas && $this->validaCuartaLineaEntrada(trim($arrayLineas[3]));
+        } catch (MyException $e) {
+            throw $e;
+        }
         return $validadasLineas;
     }
 
