@@ -13,7 +13,7 @@ function validaArchivoAEnviar() {
 function enviaArchivoAValidar(archivo) {
     const formData = new FormData();
     document.getElementById("botonAnalizar").disabled = true;
-    document.getElementById("cargando").visibility = "visible" ;
+    document.getElementById("cargando").style.visibility = "visible" ;
 
     formData.append('archivo', archivo);
 
@@ -24,18 +24,18 @@ function enviaArchivoAValidar(archivo) {
     .then(response => response.json())        
         .then(result => {
             document.getElementById("botonAnalizar").disabled = false;
-            document.getElementById("cargando").visibility = "hidden" ;
+            document.getElementById("cargando").style.visibility = "hidden" ;
             console.log('Exito:', result);
             if(result.mensaje !== 'Exito'){
                 muestraModal('Error:'+ result.mensaje);
             }else{
-                muestraModal("Conversión correcta del archivo, en seguida le llevará a la dirección de descarga");
+                alert("Conversión correcta del archivo, en seguida le llevará a la dirección de descarga");
                 window.open("subidas/salida.txt", "_blank");
             }
         })
     .catch(error => {
         document.getElementById("botonAnalizar").disabled = false;
-        document.getElementById("cargando").visibility = "hidden" ;
+        document.getElementById("cargando").style.visibility = "hidden" ;
         muestraModal('Error:'+ error);
     });
 
@@ -46,5 +46,5 @@ function muestraModal(mensaje) {
     $('#dialogoMensaje').modal();
 }
 console.log("ocultando el gif de carga");
-document.getElementById("cargando").visibility = "hidden" ;
-console.log(document.getElementById("cargando").visibility);
+document.getElementById("cargando").style.visibility = "hidden" ;
+console.log(document.getElementById("cargando"));
