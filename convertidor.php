@@ -17,19 +17,43 @@ function procesaArchivo($nombreArchivoEntrada, $archivoDeSalida) {
 
         throw $e;
     }
-    $beanChallenge1->primeraInstruccion = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->primeraInstruccion);
-    $beanChallenge1->segundaInstruccion = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->segundaInstruccion);
+    if($beanChallenge1->primeraInstruccion != procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->primeraInstruccion)){
+        throw new Exception('La instrucción 1 contiene caracteres repetidos');
+    }
+    if($beanChallenge1->segundaInstruccion != procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->segundaInstruccion)){
+        throw new Exception('La instrucción 2 contiene caracteres repetidos');
+    }
+    
     $beanChallenge1->mensaje = procesaDatosBeanCtrl::eliminaCaracteresRepetido($beanChallenge1->mensaje);
+
+    $contadorInstruccion1EnMensaje = substr_count($beanChallenge1->mensaje, $beanChallenge1->primeraInstruccion);
+    
+    if(contadorInstruccion1EnMensaje>1)){
+        throw new Exception('La instrucción 1 se encuentra en mas de una ocasión en el mensaje');
+    }
+
+    $contadorInstruccion2EnMensaje = substr_count($beanChallenge1->mensaje, $beanChallenge1->segundaInstruccion);
+    
+    if(contadorInstruccion2EnMensaje){
+        throw new Exception('La instrucción 2 se encuentra en mas de una ocasión en el mensaje');
+    }
+
+
+    $instruccion1EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->primeraInstruccion, $beanChallenge1->mensaje);    
+    $instruccion2EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->segundaInstruccion, $beanChallenge1->mensaje);
+
+    if($instruccion1EnMensaje == 'SI' && $instruccion2EnMensaje == 'SI'){
+        throw new Exception('Las dos instrucciones se encuentran en el mensaje, por lo que no se pudo definir cual instruccion esta en el mensaje');
+    }    
 
     $myfile = fopen($archivoDeSalida, "w") or die("No se puede abrir el archivo!");
 
-    $instruccion1EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->primeraInstruccion, $beanChallenge1->mensaje);
+    
     fwrite($myfile, $instruccion1EnMensaje . "\n");
-    $instruccion2EnMensaje = procesaDatosBeanCtrl::seEncuentraLaInstruccionEnElMensaje($beanChallenge1->segundaInstruccion, $beanChallenge1->mensaje);
+    
     fwrite($myfile, $instruccion2EnMensaje);
     fclose($myfile);
     return '{"mensaje":"Exito"}';
-    //return "{'mensaje':'Exito'}";
 }
 
 $uploadfile = __DIR__ . '/subidas/entrada.txt';
