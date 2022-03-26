@@ -6,26 +6,21 @@ class procesaDatosBeanCtrl{
      * @return string La cadena del mensaje sin caracteres repetidos
      */
     public static function eliminaCaracteresRepetido($mensaje){
-        $cadenaSinRepeticiones = ''; 
-        $caracterActual = ''; 
-        $caracterSinRepetir = '';
-        $unSoloCaracter = 1;
-        $tamanioCadenaMensaje = strlen($mensaje);
+        $arrMensaje   = str_split($mensaje);
+        $anterior   = "";
+        $MensajeNuevo = "";
 
-        for($i = 0;$i<$tamanioCadenaMensaje;$i++){
-            $caracterActual = substr($mensaje, $i, $unSoloCaracter);
+        foreach ($arrMensaje as $letra) {
 
-            if($caracterActual != $caracterSinRepetir){
-                $cadenaSinRepeticiones = $cadenaSinRepeticiones . $caracterSinRepetir;
-                $caracterSinRepetir = $caracterActual;
+            if ($letra != $anterior) {
+                $MensajeNuevo .= $letra;
             }
 
+            $anterior = $letra;
         }
-        if($caracterActual != $caracterSinRepetir){
-            $cadenaSinRepeticiones = $cadenaSinRepeticiones . $caracterSinRepetir;
-            $caracterSinRepetir = $caracterActual;
-        }
-        return $cadenaSinRepeticiones;
+
+        return $MensajeNuevo;
+        
     }
     
     /**

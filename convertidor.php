@@ -28,13 +28,13 @@ function procesaArchivo($nombreArchivoEntrada, $archivoDeSalida) {
 
     $contadorInstruccion1EnMensaje = substr_count($beanChallenge1->mensaje, $beanChallenge1->primeraInstruccion);
     
-    if(contadorInstruccion1EnMensaje>1)){
+    if($contadorInstruccion1EnMensaje>1){
         throw new Exception('La instrucción 1 se encuentra en mas de una ocasión en el mensaje');
     }
 
     $contadorInstruccion2EnMensaje = substr_count($beanChallenge1->mensaje, $beanChallenge1->segundaInstruccion);
     
-    if(contadorInstruccion2EnMensaje){
+    if($contadorInstruccion2EnMensaje>1){
         throw new Exception('La instrucción 2 se encuentra en mas de una ocasión en el mensaje');
     }
 

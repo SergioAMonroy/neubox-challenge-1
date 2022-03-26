@@ -146,7 +146,7 @@ class archivoEntradaCtrl {
             throw new Exception('El tamaño de linea cuatro no coincide con el tamaño indicado en n');
         }
 
-        if (!preg_match("[^\w\*]", $lineaCuatro)) {
+        if (!preg_match("/^[\w\d]+$/i",$lineaCuatro)) {
             throw new Exception('La cuarta línea no cumple con los requerimientos de caracteres');
         }
         $this->mensaje = $lineaCuatro;
